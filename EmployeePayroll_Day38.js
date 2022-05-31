@@ -1,55 +1,69 @@
-//Ability to store the Day,Hours Worked andWage Earned in a singleobject.
+/*Perform following Object
+operations using Arrow
+Functions
+a. Calc total Wage and total hours worked
+b. Show the full workings days using foreach
+c. Show Part working days using Map by reducing to
+String Array
+d. No working days only using Map function*/
 
-//UC 10:-- Object Creation
+//UC 10A to UC 11D Using object Functions along with Arrow Functions
 
-const MAX_HRS_IN_MONTH = 160;
-const MAX_DAYS_IN_MONTH = 20;
-const NUM_OF_WORKING_DAYS = 20;
-const IS_ABSENT = 0;
-const IS_FULL_TIME = 1;
-const IS_PART_TIME = 2;
-const FULL_TIME_HOURS = 8;
-const PART_TIME_HOURS = 4;
-const WAGE_PER_HOUR = 20;
-let empHrs=0;
-
-let totalEmpHrs=0;
-let totalWorkingDays=0;
 let empDailyHrsAndWageArr=new Array();
 
-function getWorkingHours(empCheck){
-    switch (empCheck){
-        case IS_ABSENT:
-            return 0;
-        
-        case IS_FULL_TIME:
-            return FULL_TIME_HOURS;
-        
-        case IS_PART_TIME:
-            return PART_TIME_HOURS;
-    }
-}
+let totalWages=empDailyHrsAndWageArr.filter(dailyHrsAndWage => dailyHrsAndWage.dailyWage > 0).reduce((totalWage,dailyHrsAndWage)=>totalWage+=dailyHrsAndWage.dailyWage,0);
+let totalHours=empDailyHrsAndWageArr.filter(dailyHrsAndWage=>dailyHrsAndWage.dailyWage>0).reduce((totalHours,dailyHrsAndWage)=>totalHours+=dailyHrsAndWage.dailyHours,0);
 
-function calcDailyWage(empHrs)
+console.log("UC 11A Total Hours:"+totalHours+"Total Wages:"+totalWages);
+
+process.stdout.write("UC 11B Logging Full Work Days")
+empDailyHrsAndWageArr.filter(dailyHrsAndWage=>dailyHrsAndWage.dailyHours==8).forEach(dailyHrsAndWage=>process.stdout.write(dailyHrsAndWage.toString()));
+
+let partWorkingDayStrArr=empDailyHrsAndWageArr.filter(dailyHrsAndWage=>dailyHrsAndWage.dailyHours==4).map(dailyHrsAndWage=>dailyHrsAndWage.toString());
+
+console.log("\nUC 11C PartWorkingDayStrings:"+partWorkingDayStrArr);
+
+let nonWorkingDayNums=empDailyHrsAndWageArr.filter(dailyHrsAndWage=>dailyHrsAndWage.dailyHours==0).map(dailyHrsAndWage=>dailyHrsAndWage.dayNum);
+
+console.log("UC 11D NonWorkingDayNums:"+nonWorkingDayNums);
+
+/*UC 11:--Ability to create
+Employee Payroll Data
+with id, name and
+salary*/
+
+//Empoyee Payroll Class
+
+class EmployeePayrollData
 {
-	return empHrs*WAGE_PER_HOUR;
-}
+	id;
+	salary;
 
-while (totalEmpHrs <= MAX_HRS_IN_MONTH && totalWorkingDays < NUM_OF_WORKING_DAYS)
+
+constructor(id,name,salary)
 {
-	totalWorkingDays++;
-	let empCheck= Math.floor(Math.random()*10)%3;
-	let totalEmpHrs=getWorkingHours(empCheck);
-	totalEmpHrs+= empHrs;
-	empDailyHrsAndWageArr.push(
-	{
-		dayNum:totalWorkingDays,
-		dailyHours:empHrs,
-		dailyWage:calcDailyWage(empHrs),
-		toString(){
-			return '\nDay'+this.dayNum+'=>Working Hours is:'+this.dailyHours+'And Wage Earned='+this.dailyWage
-		},
-	});
+	this.id=id;
+	this.name=name;
+	this.salary=salary;
 }
 
-console.log("UC 10 Showing Daily Hours Worked and Wage Earned:"+empDailyHrsAndWageArr);
+get name()
+{
+	return this._name;
+}
+set name(name)
+{
+	this._name=name;
+}
+
+toString()
+{
+	return "id="+this.id+",name="+this.name+",salary="+this.salary;
+}
+}
+
+let employeePayrollData=new EmployeePayrollData(1,"Mark",30000);
+console.log(employeePayrollData.toString());
+employeePayrollData.name="john";
+console.log(employeePayrollData.toString());
+
