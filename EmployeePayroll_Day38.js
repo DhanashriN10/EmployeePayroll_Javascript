@@ -1,33 +1,55 @@
-/*UC 9:--Use the Daily Wage Map and
-Daily Hour Map perform
-following operations using
-Arrow Functions
-a. Calc total Wage and total hours worked
-b. Show the full workings days, part working days and
-no working days*/
+//Ability to store the Day,Hours Worked andWage Earned in a singleobject.
 
-//UC 9:-- Arrow Function
+//UC 10:-- Object Creation
 
-let empDailyHrsMap=new Map();
-let empDailyWageArr= new Array();
+const MAX_HRS_IN_MONTH = 160;
+const MAX_DAYS_IN_MONTH = 20;
+const NUM_OF_WORKING_DAYS = 20;
+const IS_ABSENT = 0;
+const IS_FULL_TIME = 1;
+const IS_PART_TIME = 2;
+const FULL_TIME_HOURS = 8;
+const PART_TIME_HOURS = 4;
+const WAGE_PER_HOUR = 20;
+let empHrs=0;
 
-const findTotal=(totalVal,dailyVal)=>{
-	return totalVal+dailyVal;
+let totalEmpHrs=0;
+let totalWorkingDays=0;
+let empDailyHrsAndWageArr=new Array();
+
+function getWorkingHours(empCheck){
+    switch (empCheck){
+        case IS_ABSENT:
+            return 0;
+        
+        case IS_FULL_TIME:
+            return FULL_TIME_HOURS;
+        
+        case IS_PART_TIME:
+            return PART_TIME_HOURS;
+    }
 }
-let count =0;
-let totalHours=Array.from(empDailyHrsMap.values()).reduce(findTotal,0);
-let totalSalary=empDailyWageArr.filter(dailyWage=>dailyWage>0).reduce(findTotal,0);
 
-console.log("UC9A- Emp Wage with Arrow:"+"TotalHours:"+totalHours+"Total Wages:"+totalSalary);
+function calcDailyWage(empHrs)
+{
+	return empHrs*WAGE_PER_HOUR;
+}
 
-let nonWorkingDays=new Array();
-let partWorkingDays=new Array();
-let fullWorkingDays=new Array();
-empDailyHrsMap.forEach((value,key,map)=>{
-	if(value==8) fullWorkingDays.push(key);
-	else if(value==4) partWorkingDays.push(key);
-	else nonWorkingDays.push(key);
-});
-console.log("Full Working Days:"+fullWorkingDays);
-console.log("Part Working Days:"+partWorkingDays);
-console.log("Non Working Days:"+nonWorkingDays);
+while (totalEmpHrs <= MAX_HRS_IN_MONTH && totalWorkingDays < NUM_OF_WORKING_DAYS)
+{
+	totalWorkingDays++;
+	let empCheck= Math.floor(Math.random()*10)%3;
+	let totalEmpHrs=getWorkingHours(empCheck);
+	totalEmpHrs+= empHrs;
+	empDailyHrsAndWageArr.push(
+	{
+		dayNum:totalWorkingDays,
+		dailyHours:empHrs,
+		dailyWage:calcDailyWage(empHrs),
+		toString(){
+			return '\nDay'+this.dayNum+'=>Working Hours is:'+this.dailyHours+'And Wage Earned='+this.dailyWage
+		},
+	});
+}
+
+console.log("UC 10 Showing Daily Hours Worked and Wage Earned:"+empDailyHrsAndWageArr);
